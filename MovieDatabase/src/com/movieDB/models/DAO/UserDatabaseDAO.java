@@ -1,4 +1,4 @@
-package com.movieDB.DAO;
+package com.movieDB.models.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,14 +11,14 @@ import com.movieDB.interfaces.UserDAO;
 import com.movieDB.models.User;
 import com.mysql.jdbc.Statement;
 
-public class UserDataBaseDAO implements UserDAO {
-	private static UserDataBaseDAO dataBaseUserDAO = null;
-	private static final String DELETE_FROM_USERS_WHERE_ID = "DELETE FROM users WHERE id = ? ";
+public class UserDatabaseDAO implements UserDAO {
+	private static UserDatabaseDAO dataBaseUserDAO = null;
+	private static final String DELETE_FROM_USERS_WHERE_ID = "DELETE  FROM users WHERE user_id = ? ";
 	private static final String SELECT_FROM_USERS_WHERE_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE email = ? AND password = ? ";
 	private static final String ADD_USER_QUERY = "Insert into users values(?,?,null,?)";
 
 	@Override
-	public void addUser(User user) throws UserException {
+	public int addUser(User user) throws UserException {
 		if (user != null) {
 			Connection con = DBConnection.getInstance().getConnection();
 			try {
@@ -30,22 +30,23 @@ public class UserDataBaseDAO implements UserDAO {
 
 				ResultSet rs = ps.getGeneratedKeys();
 				rs.next();
-				user.setId(rs.getLong(1));
+				user.setId(rs.getInt(1));
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new UserException("Can`t add a User", e);
 			}
 		}
+		return user.getId();
 
 	}
 
 	@Override
-	public void removeUser(long userId) throws UserException {
+	public void removeUser(int userId) throws UserException {
 		Connection con = DBConnection.getInstance().getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(DELETE_FROM_USERS_WHERE_ID);
-			ps.setLong(1, userId);
+			ps.setInt(1, userId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 
@@ -63,27 +64,27 @@ public class UserDataBaseDAO implements UserDAO {
 			ps.setString(1, email);
 			ps.setString(2, password);
 			ResultSet result = ps.executeQuery();
-			
+
 			result.next();
 			String name = result.getString(1);
-			email = result.getString(2);
-			long id = result.getLong(3);
-			password = result.getString(4);
-			return new User(id, name, email, password);
+			String userEmail = result.getString(2);
+			int id = result.getInt(3);
+			String userPassword = result.getString(4);
+			return new User(id, name, userEmail, userPassword);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new UserException("Can`t find a User with  this email and password: ", e);
+			throw new UserException("Can`t find a User with  this email " + email + " and password: " + password, e);
 		}
 
 	}
 
 	public static UserDAO getDataBaseUserDAO() {
 
-		synchronized (UserDataBaseDAO.class) {
+		synchronized (UserDatabaseDAO.class) {
 
 			if (dataBaseUserDAO == null) {
-				dataBaseUserDAO = new UserDataBaseDAO();
+				dataBaseUserDAO = new UserDatabaseDAO();
 			}
 		}
 

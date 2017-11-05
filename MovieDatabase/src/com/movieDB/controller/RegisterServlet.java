@@ -6,30 +6,40 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.movieDB.DAO.UserDataBaseDAO;
+import javax.servlet.http.HttpSession;
+
 import com.movieDB.connection.DBConnection;
 import com.movieDB.exceptions.UserException;
 import com.movieDB.models.User;
+import com.movieDB.models.DAO.UserDatabaseDAO;
 
-@WebServlet("/register")
+@WebServlet("/Register")
 public class RegisterServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4907448809468716980L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession sesion = request.getSession();
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		// validaciq
-		User user = new User(name, email, password);
+		if (email != null && !email.isEmpty() && password != null && !password.isEmpty() && email != null
+				&& !email.isEmpty()) {
 
-		try {
-			UserDataBaseDAO.getDataBaseUserDAO().addUser(user);
-			response.getWriter().append("It`s ready you regsitred with id = " + user.getId());
-		} catch (UserException e) {
-			response.getWriter().append("Sometimes wrong with this!" + e.getMessage());
-			e.printStackTrace();
+			User user = new User(name, email, password);
+
+			try {
+				UserDatabaseDAO.getDataBaseUserDAO().addUser(user);
+				request.getRequestDispatcher("Home.jsp").forward(request, response);
+				sesion.setMaxInactiveInterval(120);
+				sesion.setAttribute("logged", true);
+			} catch (UserException e) {
+				response.sendRedirect("Home.jsp");
+				e.printStackTrace();
+			}
+		} else {
+			response.sendRedirect("Home.jsp");
 		}
 	}
 

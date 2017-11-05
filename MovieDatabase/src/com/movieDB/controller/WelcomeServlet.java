@@ -19,7 +19,7 @@ public class WelcomeServlet extends HttpServlet {
 		Object logged = sesion.getAttribute("logged");
 		boolean isLogged = (logged != null && ((boolean) logged));
 		if (sesion.isNew() || !isLogged) {
-			response.sendRedirect("Login.html");
+			response.sendRedirect("Header.jsp");
 		} else {
 			response.sendRedirect("Main.html");
 		}

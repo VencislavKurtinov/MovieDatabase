@@ -1,12 +1,12 @@
 package com.movieDB.models;
 
 public class User {
-	private long id;
+	private int id;
 	private String name;
 	private String email;
 	private String password;
 
-	public User(long id, String name, String email, String pasword) {
+	public User(int id, String name, String email, String pasword) {
 		this(name, email, pasword);
 		this.id = id;
 
@@ -17,16 +17,17 @@ public class User {
 		this.name = name;
 
 	}
+
 	public User(String email, String pasword) {
 		this.email = email;
 		this.password = pasword;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

@@ -18,8 +18,8 @@ public class DBConnection {
 	private DBConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			DBConnection.con = DriverManager.getConnection("jdbc:mysql://" + DB_URL + "/" + DATABASE, DB_USER,
-					DB_PASSWORD);
+			DBConnection.con = DriverManager.getConnection("jdbc:mysql://" + DB_URL + "/" + DATABASE
+					+ "?verifyServerCertificate=false" + "&useSSL=false" + "&requireSSL=false", DB_USER, DB_PASSWORD);
 
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

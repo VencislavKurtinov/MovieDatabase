@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.movieDB.DAO.UserDataBaseDAO;
 import com.movieDB.exceptions.UserException;
+
+import com.movieDB.models.DAO.UserDatabaseDAO;
 
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
@@ -20,19 +21,22 @@ public class LoginServlet extends HttpServlet {
 		HttpSession sesion = request.getSession();
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
+		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+			try {
+				UserDatabaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
+			} catch (UserException e) {
 
-		try {
-			UserDataBaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
-		} catch (UserException e) {
+				e.printStackTrace();
+				response.sendRedirect("Home.jsp");
+				return;
+			}
+			response.sendRedirect("Home.jsp");
+			sesion.setMaxInactiveInterval(120);
+			sesion.setAttribute("logged", true);
 
-			e.printStackTrace();
-			response.sendRedirect("Login.html");
-			return;
+		} else {
+			response.sendRedirect("Home.jsp");
 		}
-		response.sendRedirect("Main.html");
-		sesion.setMaxInactiveInterval(120);
-		sesion.setAttribute("logged", true);
-
 	}
 
 }
