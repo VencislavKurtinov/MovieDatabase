@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Header </title>
 <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,7 +15,7 @@
 			<div id="navthing">
 				<h2>
 					<a href="#" id="loginform">Login</a> | <a href="#"
-						id="registredform">Register</a> | <a href="#" id="logoutform">Logout</a>
+						id="registredform">Register</a> | <a href="./Logout" id="logoutform">Logout</a>
 					
 				</h2>
 				<div class="login">

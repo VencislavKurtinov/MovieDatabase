@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.movieDB.exceptions.UserException;
-
+import com.movieDB.models.User;
 import com.movieDB.models.DAO.UserDatabaseDAO;
 
 @WebServlet("/Login")
@@ -22,20 +22,26 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+			User user = null;
 			try {
-				UserDatabaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
+				user = UserDatabaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
 			} catch (UserException e) {
 
 				e.printStackTrace();
-				response.sendRedirect("Home.jsp");
+				request.setAttribute("error", "Don`t have a user with this email and password!");
+				request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
 				return;
 			}
-			response.sendRedirect("Home.jsp");
 			sesion.setMaxInactiveInterval(120);
+			sesion.setAttribute("user", user);
 			sesion.setAttribute("logged", true);
+			response.sendRedirect("Home.jsp");
+			
+			
 
 		} else {
-			response.sendRedirect("Home.jsp");
+			request.setAttribute("error", "Invalid password or email!");
+			request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
 		}
 	}
 

@@ -9,22 +9,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Home page</title>
 <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
 </head>
 <body>
+
 	<div id="wrap">
+
+		<jsp:include page="Header.jsp"></jsp:include>
 		<h1>
 			<input id='movie' type="text" list='movies_list'
 				placeholder="Enter movie name:" />
-
 		</h1>
-		<jsp:include page="Header.jsp"></jsp:include>
-
-		<datalist id="movies_list"> </datalist>
 		<table id='movies'>
 			<thead>
-			
+
 			</thead>
 			<tbody>
 
