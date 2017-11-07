@@ -20,26 +20,32 @@ public class RegisterServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession sesion = request.getSession();
-		String name = request.getParameter("name");
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		if (email != null && !email.isEmpty() && password != null && !password.isEmpty() && email != null
-				&& !email.isEmpty()) {
+		try {
+			HttpSession sesion = request.getSession();
+			String name = request.getParameter("name");
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			if (email != null && !email.isEmpty() && password != null && !password.isEmpty() && email != null
+					&& !email.isEmpty()) {
 
-			User user = new User(name, email, password);
+				User user = new User(name, email, password);
 
-			try {
-				UserDatabaseDAO.getDataBaseUserDAO().addUser(user);
-				request.getRequestDispatcher("Home.jsp").forward(request, response);
-				sesion.setMaxInactiveInterval(120);
-				sesion.setAttribute("logged", true);
-			} catch (UserException e) {
+				try {
+					UserDatabaseDAO.getDataBaseUserDAO().addUser(user);
+					sesion.setMaxInactiveInterval(120);
+					sesion.setAttribute("logged", true);
+					request.getRequestDispatcher("Home.jsp").forward(request, response);
+
+				} catch (UserException e) {
+					response.sendRedirect("Home.jsp");
+					e.printStackTrace();
+				}
+			} else {
 				response.sendRedirect("Home.jsp");
-				e.printStackTrace();
 			}
-		} else {
-			response.sendRedirect("Home.jsp");
+		} catch (Exception e) {
+			request.getRequestDispatcher("Home.jsp").forward(request, response);
+			return;
 		}
 	}
 

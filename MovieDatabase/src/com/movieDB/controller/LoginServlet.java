@@ -18,30 +18,32 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession sesion = request.getSession();
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
-			User user = null;
-			try {
-				user = UserDatabaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
-			} catch (UserException e) {
+		try {
+			HttpSession sesion = request.getSession();
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+				User user = null;
+				try {
+					user = UserDatabaseDAO.getDataBaseUserDAO().getUserByEmailAndPassword(email, password);
+				} catch (UserException e) {
+					request.setAttribute("error", "Don`t have a user with this email and password!");
+					request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+					e.printStackTrace();
+					return;
+				}
+				sesion.setMaxInactiveInterval(120);
+				sesion.setAttribute("user", user);
+				sesion.setAttribute("logged", true);
+				response.sendRedirect("Home.jsp");
 
-				e.printStackTrace();
-				request.setAttribute("error", "Don`t have a user with this email and password!");
+			} else {
+				request.setAttribute("error", "Invalid password or email!");
 				request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
-				return;
 			}
-			sesion.setMaxInactiveInterval(120);
-			sesion.setAttribute("user", user);
-			sesion.setAttribute("logged", true);
-			response.sendRedirect("Home.jsp");
-			
-			
-
-		} else {
-			request.setAttribute("error", "Invalid password or email!");
+		} catch (Exception e) {
 			request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+			return;
 		}
 	}
 

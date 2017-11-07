@@ -22,38 +22,16 @@ $(function() {
 										+ "</button></a>" + "</td>";
 								result += "<td>" + movie.plot;
 								+"</td>";
-								// result += "<td> <span class='delete' id=" +
-								// movie.id
-								// + ">&times;</span> </td>";
-								// result += "</tr>";
+
 							}
 
 							$('table > tbody').html(result);
 
-							// $('.delete').on('click', function() {
-							// if (confirm('Are you sure?')) {
-							// var id = $(this).attr('id');
-							// var self = this;
-							//
-							// $.ajax({
-							// url : 'alcohols?id=' + id,
-							// type : 'DELETE',
-							// success : function(result) {
-							// $(self).parent().parent().remove();
-							// }
-							// });
-							// }
-							//
-							// });
 						});
 	}
 
-	// $('#search').on('click', function() {
-	// $('#movie').css('background-color', 'blue');
-	// });
-	//
 	$('#movie').on('keyup', function() {
-		var text = this.value; // $(this).val()
+		var text = this.value;
 		loadMovies(text);
 
 		$.get('Home?query=' + text).then(function(data) {
@@ -67,16 +45,5 @@ $(function() {
 		});
 	});
 
-	// $('#add').on('click', function() {
-	// var data = {
-	// name: $('#name').val(),
-	// price: $('#price').val(),
-	// procent: $('#procent').val(),
-	// };
-	//		
-	// $.post('Home', {data: JSON.stringify(data)}).then(function() {
-	// loadMovies('');
-	// });
-	// });
 	loadMovies('');
 });

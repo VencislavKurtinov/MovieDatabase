@@ -14,15 +14,13 @@ public class WelcomeServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		HttpSession sesion = request.getSession();
 		Object logged = sesion.getAttribute("logged");
 		boolean isLogged = (logged != null && ((boolean) logged));
-		if (sesion.isNew() || !isLogged) {
-			response.sendRedirect("Home.jsp");
-		} else {
-			response.sendRedirect("Main.html");
-		}
+
+		response.sendRedirect("Home.jsp");
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

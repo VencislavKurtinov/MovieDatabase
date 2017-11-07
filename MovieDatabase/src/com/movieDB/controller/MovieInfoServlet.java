@@ -20,28 +20,34 @@ public class MovieInfoServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession sesion = request.getSession();
-		String name = request.getParameter("name");
-		String id = request.getParameter("id");
-		OuterMovieDatabaseDAO dao = OuterMovieDatabaseDAO.getOuterMovieDatabaseDAO();
-		Movie movie = null;
-
 		try {
-			movie = dao.searchMovie(name);
+			HttpSession sesion = request.getSession();
+			String name = request.getParameter("name");
+			String id = request.getParameter("id");
+			OuterMovieDatabaseDAO dao = OuterMovieDatabaseDAO.getOuterMovieDatabaseDAO();
+			Movie movie = null;
 
-		} catch (MovieException e) {
+			try {
+				movie = dao.searchMovie(name);
 
+			} catch (MovieException e) {
+
+				request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+				e.printStackTrace();
+				return;
+			}
+			movie.setId(Integer.parseInt(id));
+			sesion.setAttribute("movie", movie);
+			request.getRequestDispatcher("MoviePage.jsp").forward(request, response);
+		} catch (Exception e) {
 			request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
 			e.printStackTrace();
+			return;
 		}
-		movie.setId(Integer.parseInt(id));
-		sesion.setAttribute("movie", movie);
-		request.getRequestDispatcher("MoviePage.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

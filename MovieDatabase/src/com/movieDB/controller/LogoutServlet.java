@@ -10,11 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/Logout")
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 51L;
-   
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.getSession().invalidate();
-		response.sendRedirect("Home.jsp");
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			request.getSession().invalidate();
+			response.sendRedirect("Home.jsp");
+		} catch (Exception e) {
+			request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+			return;
+		}
 	}
 
 }

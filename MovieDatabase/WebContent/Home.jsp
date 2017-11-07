@@ -18,6 +18,7 @@
 
 		<jsp:include page="Header.jsp"></jsp:include>
 		<h1>
+
 			<input id='movie' type="text" list='movies_list'
 				placeholder="Enter movie name:" />
 		</h1>
